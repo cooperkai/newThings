@@ -42,9 +42,15 @@ https://www.baeldung.com/junit-5-temporary-directory)
 
 [MyBatis stored procedure call with OUT parameters](https://stackoverflow.com/questions/9215784/java-mybatis-stored-procedure-call-with-out-parameters)
 
-[in Junit5 you have to add a artifact engine for maven running your testwhen package](https://www.baeldung.com/maven-cant-find-junit-tests)
+[in Junit5 you have to add an artifact engine for maven running your test when package](https://www.baeldung.com/maven-cant-find-junit-tests)
 
 maven artifactId don't too long or you will not use them
 舉例:要寫再父資料夾時使用models會無法使用到
 
 [git repository 加入資料夾時，記得把該資料夾的.git刪除，就能git add 資料夾/ 了](https://www.cnblogs.com/polk6/p/16131269.html)
+
+```git
+git add 資料夾/
+git commit -m "some message"
+git push
+```
