@@ -1,9 +1,9 @@
-# Ways for import git project using eclipse
+# Ways for importing git project using eclipse
 
-- already have a git project, so clone a git project
+- You already have a git project, so clone a git project
 
 ```git
-git clone yourproject
+git clone your project
 ```
 
 1. below operate in Eclipse
@@ -17,7 +17,7 @@ git clone yourproject
       1. choose repositories that you need
 
    4. Select a Wizard to use for import projects:
-      1. choose import as general project
+      1. choose import as a general project
 
    5. Import projects, then finish
 
@@ -26,10 +26,10 @@ git clone yourproject
 
    2. fill pom.xml form
 
-   3. now it becoming a maven project
+   3. now it is becoming a maven project
 
 1. fix missing default file system
-   1. right click the project -> build path -> in souce tab you can see the red missing notify -> click Apply and Close
+   1. right click the project -> build path -> at the source tab you can see the red missing notify -> click Apply and Close
 
    1. file system finish
 
