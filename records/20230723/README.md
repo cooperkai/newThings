@@ -3,7 +3,7 @@
 certutil -hashfile filename hash-function
 ```
 
-- mvn package jar exclude file
+- [mvn package jar exclude file](https://stackoverflow.com/questions/5222539/exclude-file-from-maven-build/16031791#16031791)
 ```xml
 <build>
   <plugins>
