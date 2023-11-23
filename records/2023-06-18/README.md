@@ -2,7 +2,7 @@
 
 * windows install maven
   
-  add path in env: use full path which your maven.bin downloaded.(xxxx/maven-version/bin)
+  add path in env: use full path where is your maven.bin downloaded.(xxxx/maven-version/bin)
   
   notice: can't do it like jre install(create new parameter and add in PATH)
 
