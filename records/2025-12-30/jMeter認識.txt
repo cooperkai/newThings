@@ -1,0 +1,36 @@
+jMeter認識
+--Install the JMeter Plugins Manager
+	--這樣就可以使用不同的套件，增加測試的手段
+		https://www.blazemeter.com/blog/how-install-jmeter-plugins-manager?utm_source=blog&utm_medium=BM_blog&utm_campaign=introducing-the-random-csv-data-set-config-plugin-on-jmeter
+--random variable csv data
+	--使用場景，傳入參數透過csv文件隨機帶入，以達成測試的真實性
+	--install randomcsv data set config plugin
+		https://www.blazemeter.com/blog/introducing-the-random-csv-data-set-config-plugin-on-jmeter
+	--在config的variable names
+		--沒有命名的話
+			--檔案裡面設置標題名稱，就是標題名稱，變數直接取標題名稱
+				https://dzone.com/articles/introducing-the-random-csv-data-set-config-plugin
+		--命名的話
+			--變數取命名的名稱
+--test Keycloak Basic Auth(OpenID Connect)
+	--after JMeter 3.2
+		--1. add HTTP Authorization Manager
+			--no need Domin and Realm
+				--Http Request will include in the path
+		--2. add HTTP Request
+			--using Body Data
+				--add HTTP Header Manager
+					--add Header type
+			--using Paramters
+				--content-type is include so no need
+		--3. success get token
+--pass varibles(use get token as a example)
+	--in same thread group
+		https://haquemousume.medium.com/jmeter-authorization-with-dynamic-access-token-bearer-and-generate-test-data-dynamically-83aa6df2ce56
+			--use JSON Extractor(set your token name)
+			--${your variable name}, 記得取值的檔案，一定要在設定變數的後面，要不然會取不到
+	--to other thread group
+		https://qaautomation.expert/2020/05/22/jmeter-authorization-with-access-token/
+		--use JSON Extractor(set your token name)
+			--在 BeanShell Assertion 寫上 ${__setProperty(new variable name, ${your variable name})}
+				--${__property(new variable name)}, 記得取值的檔案，一定要在設定變數的後面，要不然會取不到
