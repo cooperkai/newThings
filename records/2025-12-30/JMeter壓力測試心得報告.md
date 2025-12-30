@@ -2,7 +2,7 @@
 
 ---
 
-## 一、報告怎麼開始（開場 1–2 分鐘）
+## 一、報告開始
 
 在實際開發中，我們常常只確認功能是否正常，  
 例如 API 能不能成功呼叫、資料是否正確處理。
@@ -46,14 +46,6 @@
 
 ---
 
-### 本次測試想回答的問題
-
-- 系統最多可以承受多少使用者同時請求？
-- 在使用者數提高時，回應時間是否仍可接受？
-- 高負載情況下是否會出現錯誤（timeout、500 error）？
-
----
-
 ## 三、JMeter 測試設計
 
 ### 測試方式說明
@@ -64,13 +56,15 @@
 
 ---
 
-### Thread Group 設定
+### Thread Group 欄位說明
 
-- 使用者數（Number of Threads）
-- Ramp-Up Time
-- Loop Count
+![Thread Group](threadGroup.PNG)
 
-（可搭配簡單架構圖或設定截圖）
+| 欄位 | 說明 |
+| --- | --- |
+| Number of Threads (users) | 模擬的並發用戶數量。 |
+| Ramp-Up Period (in seconds) | JMeter 啟動所有線程所需的時間。設為 0 表示立即啟動所有線程。 |
+| Loop Count | 每個線程執行的循環次數。設為 -1 表示無限循環。 |
 
 ---
 
@@ -82,31 +76,52 @@
 
 ---
 
-### 變數設定
+### 輔助設定
+
+- HTTP Authorization Manager 取 Token
+- Header 設定
+- JSON Extractor
+  - 可以提取回應中的值，當作下個呼叫的變數
+  - 怎麼匹配參考：[JSON Path 語法](https://github.com/json-path/JsonPath)
+
+  **JSON Extractor 欄位說明**
+
+  ![JSON Extractor](jsonExtractor.PNG)
+  
+  | 欄位 | 說明 |
+  | --- | --- |
+  | Name | 提取器的名稱，用於識別此元件。 |
+  | Comments | 可選的註釋欄位，用於記錄用途。 |
+  | Apply to | 指定應用範圍，如 Main sample only, Sub-samples only 等。 |
+  | Names of created variables | 定義提取後變數的名稱，多個變數用分號分隔。 |
+  | JSON Path expressions | JSON Path 表達式，用於指定要提取的 JSON 路徑。 |
+  | Match No | 指定匹配的索引，如 0 表示隨機，1 表示第一個匹配，-1 表示全部。 |
+  | Compute concatenation var | 是否計算串接變數。 |
+  | Default Values | 如果沒有匹配，設定的預設值。 |
 
 - CSV Data Set Config
   - 事先準備會員資料檔
   - 每個 Thread 讀取不同會員資料
   - 避免重複會員造成測試失真
 
-### CSV Data Set Config 欄位說明
+  **CSV Data Set Config 欄位說明**
 
-![CSV Data Set Config](csvDataSetCofig.PNG)
+  ![CSV Data Set Config](csvDataSetCofig.PNG)
 
-| 欄位 (Field) | 用途說明 |
-| :--- | :--- |
-| **Filename** | CSV 檔案的完整路徑或相對路徑。這是 JMeter 讀取資料的來源檔案。 |
-| **File encoding** | 檔案的編碼格式，例如 `UTF-8`、`Big5`。如果 CSV 檔內有中文或特殊字元，請務必設定正確的編碼，以免亂碼。 |
-| **Variable Names** | 定義 CSV 中各欄位對應的變數名稱，多個變數用逗號 `,` 分隔。例如，如果 CSV 有兩欄 `username,password`，這裡就填 `user,pwd`，在後續的請求中就可以用 `${user}` 和 `${pwd}` 來取值。 |
-| **Ignore first line** | 如果 CSV 檔案的第一行是標頭 (Header)，可以將此欄位設為 `True`，JMeter 會忽略第一行，從第二行開始讀取資料。 |
-| **Delimiter** | 欄位之間的分隔符號。預設是逗號 `,`，也可以是 Tab (`\t`) 或其他自訂符號。 |
-| **Allow quoted data?** | 是否允許資料值被引號 `"` 包住。如果設定為 `True`，JMeter 會正確解析 "value1","value2" 這樣格式的資料。 |
-| **Recycle on EOF?** | End of File (EOF) 時是否要從頭循環讀取？如果設定為 `True`，當所有執行緒 (Thread) 讀完檔案後，會回到第一筆資料重新開始。 |
-| **Stop thread on EOF?** | End of File (EOF) 時是否要停止該執行緒？如果設定為 `True`，執行緒讀完一筆資料後，如果沒有更多資料可讀，該執行緒就會結束執行。`Recycle on EOF?` 和 `Stop thread on EOF?` 通常是二選一。 |
-| **Sharing mode** | 設定 CSV 檔案的共享模式： |
-| | **All threads**: 所有執行緒共享同一個檔案，每個執行緒會依序讀取檔案中的下一筆資料 (最常用)。 |
-| | **Current thread group**: 檔案僅在當前的執行緒群組 (Thread Group) 內共享。 |
-| | **Current thread**: 每個執行緒獨立開啟並讀取自己的檔案。 |
+  | 欄位 (Field) | 用途說明 |
+  | :--- | :--- |
+  | **Filename** | CSV 檔案的完整路徑或相對路徑。這是 JMeter 讀取資料的來源檔案。 |
+  | **File encoding** | 檔案的編碼格式，例如 `UTF-8`、`Big5`。如果 CSV 檔內有中文或特殊字元，請務必設定正確的編碼，以免亂碼。 |
+  | **Variable Names** | 定義 CSV 中各欄位對應的變數名稱，多個變數用逗號 `,` 分隔。例如，如果 CSV 有兩欄 `username,password`，這裡就填 `user,pwd`，在後續的請求中就可以用 `${user}` 和 `${pwd}` 來取值。 |
+  | **Ignore first line** | 如果 CSV 檔案的第一行是標頭 (Header)，可以將此欄位設為 `True`，JMeter 會忽略第一行，從第二行開始讀取資料。 |
+  | **Delimiter** | 欄位之間的分隔符號。預設是逗號 `,`，也可以是 Tab (`\t`) 或其他自訂符號。 |
+  | **Allow quoted data?** | 是否允許資料值被引號 `"` 包住。如果設定為 `True`，JMeter 會正確解析 "value1","value2" 這樣格式的資料。 |
+  | **Recycle on EOF?** | End of File (EOF) 時是否要從頭循環讀取？如果設定為 `True`，當所有執行緒 (Thread) 讀完檔案後，會回到第一筆資料重新開始。 |
+  | **Stop thread on EOF?** | End of File (EOF) 時是否要停止該執行緒？如果設定為 `True`，執行緒讀完一筆資料後，如果沒有更多資料可讀，該執行緒就會結束執行。`Recycle on EOF?` 和 `Stop thread on EOF?` 通常是二選一。 |
+  | **Sharing mode** | 設定 CSV 檔案的共享模式： |
+  | | **All threads**: 所有執行緒共享同一個檔案，每個執行緒會依序讀取檔案中的下一筆資料 (最常用)。 |
+  | | **Current thread group**: 檔案僅在當前的執行緒群組 (Thread Group) 內共享。 |
+  | | **Current thread**: 每個執行緒獨立開啟並讀取自己的檔案。 |
 
 ---
 
@@ -120,16 +135,6 @@
 - 90% / 95% Response Time  
 - Throughput  
 - Error Rate  
-
----
-
-### 結果觀察重點
-
-- 使用者數增加時，回應時間的變化情況
-- Throughput 是否隨負載成長
-- 是否在高負載下開始出現錯誤
-
-（可搭配 Summary Report 截圖）
 
 ---
 
